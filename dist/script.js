@@ -17524,6 +17524,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
+/* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
 
 
 
@@ -17538,6 +17539,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click');
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.balcon_icons', '.balcon_icons_img', '.big_img > img', 'do_image_more', 'inline-block');
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
+  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('#timer', '#days', '#hours', '#minutes', '#seconds', '2021-07-30');
 });
 
 /***/ }),
@@ -17594,8 +17596,6 @@ var changeModalState = function changeModalState(state) {
             state[prop] = item.value;
             break;
         }
-
-        console.log(state);
       });
     });
   }
@@ -17869,6 +17869,66 @@ var tabs = function tabs(headerSelector, tabSelector, contentSelector, activeCla
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
+
+/***/ }),
+
+/***/ "./src/js/modules/timer.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/timer.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var timer = function timer(timerSelector, daysSelector, hoursSelector, minutesSelector, secondsSelector, deadline) {
+  var timer = document.querySelector(timerSelector),
+      daysCounter = timer.querySelector(daysSelector),
+      hoursCounter = timer.querySelector(hoursSelector),
+      minutesCounter = timer.querySelector(minutesSelector),
+      secondsCounter = timer.querySelector(secondsSelector);
+  var left;
+  deadline = new Date(Date.parse(deadline));
+  deadline.setHours(0);
+
+  var timeLeft = function timeLeft() {
+    var currentDate = new Date();
+    left = Date.parse(deadline) - Date.parse(currentDate);
+    var days = Math.floor(left / (1000 * 60 * 60 * 24)),
+        seconds = Math.floor(left / 1000 % 60),
+        minutes = Math.floor(left / 1000 / 60 % 60),
+        hours = Math.floor(left / (1000 * 60 * 60) % 24);
+    setTimerCounter(days, hours, minutes, seconds);
+  };
+
+  var setTimerCounter = function setTimerCounter(daysRemain, hoursRemain, minutesRemain, secondsRemain) {
+    daysCounter.textContent = addZero(+daysRemain);
+    hoursCounter.textContent = addZero(+hoursRemain);
+    minutesCounter.textContent = addZero(+minutesRemain);
+    secondsCounter.textContent = addZero(+secondsRemain);
+  };
+
+  var addZero = function addZero(num) {
+    if (num >= 0 && num < 10) {
+      return '0' + num;
+    } else {
+      return num;
+    }
+  };
+
+  var updateClock = function updateClock() {
+    var time = setInterval(timeLeft, 1000);
+
+    if (left <= 0) {
+      clearInterval(time);
+    }
+  };
+
+  timeLeft();
+  updateClock();
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (timer);
 
 /***/ }),
 
